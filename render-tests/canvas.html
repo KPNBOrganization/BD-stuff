@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <script>
+
+        window.onload = function() {
+
+            var canvas = document.getElementById( 'canvas' );
+            var ctx = canvas.getContext( '2d' );
+
+            var elements = [];
+
+            for( let i = 0; i < 100000; i++ ) {
+
+                let element = {
+                    x: Math.floor(Math.random() * 501),
+                    y: Math.floor(Math.random() * 501),
+                    color: 'rgba(' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', 1)'
+                };
+
+                ctx.fillStyle = element.color;
+                ctx.fillRect( element.x, element.y, 50, 50 );
+
+                elements.push( element );
+
+            }
+
+            var timeBefore = Date.now();
+
+            setInterval(function() {
+
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect( 0, 0, 500, 500 );
+
+                for( let element of elements ) {
+                    
+                    element.x = Math.floor(Math.random() * 501);
+                    element.y = Math.floor(Math.random() * 501);
+
+                    ctx.fillStyle = element.color;
+                    ctx.fillRect( element.x, element.y, 50, 50 );
+
+                }
+
+                var timeAfter = Date.now()
+
+                timeBefore = timeAfter;
+
+            }, 100);
+
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+    <canvas id="canvas" width="500" height="500"></canvas>
+
+</body>
+
+</html>

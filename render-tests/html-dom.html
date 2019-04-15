@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+
+<head>
+
+<script>
+
+    var elements = [];
+
+    window.onload = function() {
+
+        for( let i = 0; i < 500; i++ ) {
+
+            let element = document.createElement('div');
+
+            element.style.position = 'absolute';
+            element.style.transform = 'translate(' + Math.floor(Math.random() * 501) + 'px, ' + Math.floor(Math.random() * 501) + 'px)';
+            element.style.background = 'rgba(' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', 1)';
+            element.style.width = '50px';
+            element.style.height = '50px';
+            
+            elements.push( element );
+
+            document.body.appendChild( element );
+
+        }
+
+        var timeBefore = Date.now();
+
+        setInterval(function() {
+
+            for( let element of elements ) {
+
+                element.style.transform = 'translate(' + Math.floor(Math.random() * 501) + 'px, ' + Math.floor(Math.random() * 501) + 'px)';
+
+            }
+
+            var timeAfter = Date.now()
+
+            console.log( timeAfter - timeBefore );
+
+            timeBefore = timeAfter;
+
+        }, 0);
+
+    }
+
+</script>
+
+</head>
+
+<body>
+
+
+
+</body>
+
+</html>
