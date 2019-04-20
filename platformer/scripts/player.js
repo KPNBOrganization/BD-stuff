@@ -1,8 +1,3 @@
-const COLLISION_TOP= 1;
-const COLLISION_BOTTOM = 2;
-const COLLISION_LEFT = 3;
-const COLLISION_RIGHT = 4;
-
 class Player {
 
     constructor( level ) {
@@ -17,8 +12,12 @@ class Player {
 
         this.onGround = true;
 
-        this.height = 20;
-        this.width = 20;
+        this.height = 84;
+        this.width = 55;
+
+        this.image = false;
+
+        this.loadTexture();
 
     }
 
@@ -29,33 +28,48 @@ class Player {
 
         let positionX = this.positionX + velocityX * this.level.renderer.deltaTime;
         let positionY = this.positionY + velocityY * this.level.renderer.deltaTime;
-        
+
         let onGround = false;
 
-        for( let obstacle of this.level.obstacles ) {
+        // Out of map check
 
-            if( this.detectCollision( obstacle, positionX, positionY ) == true ) {
+        if( positionY < -200.00 ) {
 
-                // Detecting, where we hit the obstacle
-                
-                if( this.positionY >= obstacle.positionY + obstacle.height ) {
+            velocityY = 0.00;
+
+            positionX = 0.00;
+            positionY = 20.00;
+
+            onGround = true;
+
+        } else {
+
+            for( let obstacle of this.level.obstacles ) {
+
+                if( this.detectCollision( obstacle, positionX, positionY ) == true ) {
+
+                    // Detecting, where we hit the obstacle
                     
-                    velocityY = 0.00;
-                    positionY = obstacle.positionY + obstacle.height;
-                    onGround = true;
+                    if( this.positionY >= obstacle.positionY + obstacle.height ) {
+                        
+                        velocityY = 0.00;
+                        positionY = obstacle.positionY + obstacle.height;
+                        onGround = true;
 
-                } else if( this.positionY < obstacle.positionY ) {
+                    } else if( this.positionY + this.height <= obstacle.positionY ) {
 
-                    velocityY = -this.level.gravity; 
-                    positionY = obstacle.positionY - this.height;
+                        velocityY = -this.level.gravity; 
+                        positionY = obstacle.positionY - this.height;
 
-                } else if( this.positionX < obstacle.positionX ) {
+                    } else if( this.positionX < obstacle.positionX ) {
 
-                    positionX = obstacle.positionX - this.width;
+                        positionX = obstacle.positionX - this.width;
 
-                } else if( this.positionX > obstacle.positionX ) {
+                    } else if( this.positionX > obstacle.positionX ) {
 
-                    positionX = obstacle.positionX + obstacle.width;
+                        positionX = obstacle.positionX + obstacle.width;
+
+                    }
 
                 }
 
@@ -80,13 +94,25 @@ class Player {
         let positionX = this.positionX - this.level.renderer.camera.positionX; 
         let positionY = this.positionY - this.level.renderer.camera.positionY; 
 
-        this.level.renderer.ctx.fillStyle = '#00ff00';
+        if( this.image ) {
+
+            this.level.renderer.ctx.drawImage( 
+                this.image,
+                positionX, 
+                this.level.renderer.canvasHeight - this.height - positionY, 
+                this.width, 
+                this.height
+            );
+
+        }
+
+        /*this.level.renderer.ctx.fillStyle = '#00ff00';
         this.level.renderer.ctx.fillRect( 
             positionX, 
             this.level.renderer.canvasHeight - this.height - positionY, 
             this.width, 
             this.height 
-        );
+        );*/
 
     }
 
@@ -125,6 +151,18 @@ class Player {
         }
 
         return false;
+
+    }
+
+    loadTexture() {
+
+        let image = new Image();
+
+        image.onload = () => {
+            this.image = image;
+        };
+
+        image.src = 'images/Mexican_Texturised_180-resized.png';
 
     }
 

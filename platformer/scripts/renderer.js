@@ -18,7 +18,7 @@ class Renderer {
 
     clearScreen() {
 
-        this.ctx.fillStyle = '#000000';
+        this.ctx.fillStyle = '#b3eeff';
         this.ctx.fillRect( 0, 0, this.canvasWidth, this.canvasHeight );
 
     }

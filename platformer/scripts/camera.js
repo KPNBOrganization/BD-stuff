@@ -13,8 +13,8 @@ class Camera {
 
         // Offsets
 
-        let offsetX = ( this.renderer.canvasWidth + player.width ) / 2;
-        let offsetY = ( this.renderer.canvasHeight + player.height ) / 2;
+        let offsetX = ( this.renderer.canvasWidth ) / 2;
+        let offsetY = ( this.renderer.canvasHeight ) / 2;
 
         this.positionX = player.positionX - offsetX;
         this.positionY = player.positionY - offsetY;
