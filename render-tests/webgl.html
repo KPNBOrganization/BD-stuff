@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <script src="three.js"></script>
+
+    <script>
+
+        var gl;
+        var vertexPositionAttribute;
+        var vertexTransformUniform;
+        var vertexProjectionUniform;
+        var vertexColorAttribute;
+        var squareVerticesBuffer;
+
+        function getShader( gl, id ) {
+
+            var shaderScript = document.getElementById( id );
+            var shaderSource = shaderScript.innerHTML;
+            var shader = null;
+
+            if( shaderScript.type == 'x-shader/x-fragment' ) {
+
+                shader = gl.createShader( gl.FRAGMENT_SHADER );
+
+            } else if( shaderScript.type == 'x-shader/x-vertex' ) {
+
+                shader = gl.createShader( gl.VERTEX_SHADER );
+
+            }
+
+            gl.shaderSource( shader, shaderSource );
+            gl.compileShader( shader );
+
+            if( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
+
+                console.error( 
+                    "An error occured compiling the shaders", 
+                    gl.getShaderInfoLog( shader ) 
+                );
+
+                return null;
+
+            }
+
+            return shader;
+
+        }
+
+        function initShaders() {
+
+            var fragmentShader = getShader( gl, 'shader-fs' );
+            var vertexShader = getShader( gl, 'shader-vs' );
+
+            var shaderProgram = gl.createProgram();
+
+            gl.attachShader( shaderProgram, vertexShader );
+            gl.attachShader( shaderProgram, fragmentShader );
+            gl.linkProgram( shaderProgram );
+
+            if ( !gl.getProgramParameter( shaderProgram, gl.LINK_STATUS ) ) {
+                console.error( 'Unable to initialize the shader program.' );
+            }
+
+            gl.useProgram( shaderProgram );
+
+            vertexPositionAttribute = gl.getAttribLocation( shaderProgram, 'aVertexPosition' );
+            
+            gl.enableVertexAttribArray( vertexPositionAttribute );
+
+            vertexColorAttribute = gl.getAttribLocation( shaderProgram, 'aVertexColor' );
+            
+            gl.enableVertexAttribArray( vertexColorAttribute );
+
+            vertexTransformUniform = gl.getUniformLocation( shaderProgram, 'uTransformMatrix' );
+            vertexProjectionUniform = gl.getUniformLocation( shaderProgram, 'uProjectionMatrix' );
+
+            fragmentColorUniform = gl.getUniformLocation( shaderProgram, 'uColor' );
+
+        }
+
+        function initBuffers() {
+
+            squareVerticesBuffer = gl.createBuffer();
+
+            gl.bindBuffer( gl.ARRAY_BUFFER, squareVerticesBuffer );
+
+            var vertices = [
+                25,  25,  0.0,
+                -25, 25,  0.0,
+                25,  -25, 0.0,
+                -25, -25, 0.0
+            ];
+
+            gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertices ), gl.STATIC_DRAW );
+
+        }
+
+        function setColor( color ) {
+
+            var squareColorBuffer = gl.createBuffer();
+
+            gl.bindBuffer( gl.ARRAY_BUFFER, squareColorBuffer );
+
+            var colors = [
+                color[0],  color[1],  color[2],  1.0,
+                color[0],  color[1],  color[2],  1.0,
+                color[0],  color[1],  color[2],  1.0,
+                color[0],  color[1],  color[2],  1.0
+            ];
+
+            gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( colors ), gl.STATIC_DRAW );
+
+            return squareColorBuffer;
+
+        }
+
+        function drawScene() {
+
+            gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+
+            var projectionMatrix = new THREE.Matrix4();
+            
+            projectionMatrix.makePerspective( -gl.canvas.width / 2, gl.canvas.width / 2, -gl.canvas.height / 2, gl.canvas.height / 2, 1.0, 100 );
+            
+            for( let i = 0; i < 100000; i++ ) {
+
+                gl.bindBuffer( gl.ARRAY_BUFFER, squareVerticesBuffer );
+                
+                gl.vertexAttribPointer( 
+                    vertexPositionAttribute,
+                    3,
+                    gl.FLOAT,
+                    false,
+                    0,
+                    0
+                );
+
+                var colorBuffer = setColor( [
+                    Math.random(),
+                    Math.random(),
+                    Math.random()
+                ] );
+
+                gl.bindBuffer( gl.ARRAY_BUFFER, colorBuffer );
+                
+                gl.vertexAttribPointer(
+                    vertexColorAttribute, 
+                    4, 
+                    gl.FLOAT, 
+                    false, 
+                    0, 
+                    0
+                );
+
+                var transformationMatrix = new THREE.Matrix4();
+
+                let posX = Math.floor( Math.random() * 500 ) - 250;
+                let posY = Math.floor( Math.random() * 500 ) - 250;
+
+                transformationMatrix.makeTranslation( posX, posY, -1.0 );
+
+                gl.uniformMatrix4fv( vertexTransformUniform, false, new Float32Array( transformationMatrix.toArray() ) );
+
+                gl.uniformMatrix4fv( vertexProjectionUniform, false, new Float32Array( projectionMatrix.toArray() ) );
+            
+                let color = [ 1.0, 1.0, 1.0, 1.0 ];
+
+                gl.uniformMatrix4fv( fragmentColorUniform, false, new Float32Array( color ) );
+
+                gl.drawArrays( gl.TRIANGLE_STRIP, 0, 4 );
+
+            }
+
+        }
+
+        window.onload = function() {
+
+            var canvas = document.getElementById( 'glcanvas' );
+
+            gl = canvas.getContext( 'webgl' );
+
+            gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
+            gl.enable( gl.DEPTH_TEST );
+            gl.depthFunc( gl.LEQUAL );
+            gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+
+            initShaders();
+            initBuffers();
+
+            // setInterval( function() {
+                drawScene();
+            // }, 0 );
+            
+        };
+
+    </script>
+
+    <script id="shader-fs" type="x-shader/x-fragment">
+        varying lowp vec4 vColor;
+
+        void main( void ) {
+            gl_FragColor = vColor;
+        }
+    </script>
+
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec3 aVertexPosition;
+        attribute vec4 aVertexColor;
+
+        uniform mat4 uTransformMatrix;
+        uniform mat4 uProjectionMatrix;
+
+        varying lowp vec4 vColor;
+
+        void main( void ) {
+            gl_Position = uProjectionMatrix * uTransformMatrix * vec4( aVertexPosition, 1.0 );
+            vColor = aVertexColor;
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <canvas id="glcanvas" width="500" height="500"></canvas>
+
+</body>
+
+</html>
