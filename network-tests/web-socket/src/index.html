@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+
+        var socket = io();
+
+        socket.on( 'resource', function( message ) {
+
+            console.log( message );
+
+        } );
+
+    </script>
+
+</head>
+
+<body>
+
+</body>
+
+</html>
