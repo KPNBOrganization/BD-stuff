@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <script>
+        
+        const request = new XMLHttpRequest();
+        var requestsCount = 0;
+
+        request.addEventListener( 'load', function() {
+
+            requestsCount++;
+
+            if( this.status == 200 && requestsCount < 500 ) {
+
+                console.log( this.responseText );
+
+                request.open( 'GET', 'http://localhost:3000/resource' );
+                request.send();
+
+            }
+
+        } );
+
+        request.open( 'GET', 'http://localhost:3000/resource' );
+        request.send();
+
+    </script>
+
+</head>
+
+<body>
+</body>
+
+</html>
