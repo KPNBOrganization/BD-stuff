@@ -23,13 +23,13 @@ class Level {
 
     }
 
-    draw() {
+    draw( gl ) {
 
-        this.player.draw();
+        this.player.draw( gl );
 
         for( let obstacle of this.obstacles ) {
             
-            obstacle.draw();
+            obstacle.draw( gl );
 
         }
 

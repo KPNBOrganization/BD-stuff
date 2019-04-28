@@ -6,13 +6,14 @@
     <script>
         
         const request = new XMLHttpRequest();
+        
         var requestsCount = 0;
 
         request.addEventListener( 'load', function() {
 
             requestsCount++;
 
-            if( this.status == 200 && requestsCount < 500 ) {
+            if( this.status == 200 && requestsCount < 10000 ) {
 
                 console.log( this.responseText );
 
@@ -25,6 +26,24 @@
 
         request.open( 'GET', 'http://localhost:3000/resource' );
         request.send();
+
+        /*for( let i = 0; i < 10000; i++ ) {
+
+            const request = new XMLHttpRequest();
+
+            request.addEventListener( 'load', function() {
+
+                if( this.status == 200 ) {
+
+                    console.log( this.responseText );
+                }
+
+            } );
+
+            request.open( 'GET', 'http://localhost:3000/resource' );
+            request.send();
+
+        }*/
 
     </script>
 

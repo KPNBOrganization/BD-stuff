@@ -10,10 +10,14 @@
         var socket = io();
 
         socket.on( 'resource', function( message ) {
-
             console.log( message );
-
         } );
+
+        for( let i = 0; i < 10000; i++ ) {
+            
+            socket.emit( 'resource', '' );
+
+        }
 
     </script>
 
