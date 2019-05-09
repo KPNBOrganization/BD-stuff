@@ -7,27 +7,30 @@
 
         window.onload = function() {
 
-            var canvas = document.getElementById( 'canvas' );
-            var ctx = canvas.getContext( '2d' );
+            const canvas = document.getElementById( 'canvas' );
+            const ctx = canvas.getContext( '2d' );
 
-            var elements = [];
+            // var elements = [];
 
             for( let i = 0; i < 100000; i++ ) {
 
-                let element = {
-                    x: Math.floor(Math.random() * 501),
-                    y: Math.floor(Math.random() * 501),
-                    color: 'rgba(' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', 1)'
-                };
+                // var element = {
+                    // x: Math.floor(Math.random() * 501),
+                    // y: Math.floor(Math.random() * 501),
+                    // color: 'rgba(' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', 1)'
+                // };
 
-                ctx.fillStyle = element.color;
-                ctx.fillRect( element.x, element.y, 50, 50 );
+                // ctx.fillStyle = element.color;
+                // ctx.fillRect( element.x, element.y, 50, 50 );
 
-                elements.push( element );
+                // elements.push( element );
+
+                ctx.fillStyle = 'rgba(' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', 1)';
+                ctx.fillRect( Math.floor(Math.random() * 501), Math.floor(Math.random() * 501), 50, 50 );
 
             }
 
-            var timeBefore = Date.now();
+            /*var timeBefore = Date.now();
 
             setInterval(function() {
 
@@ -48,7 +51,7 @@
 
                 timeBefore = timeAfter;
 
-            }, 100);
+            }, 100);*/
 
         }
 

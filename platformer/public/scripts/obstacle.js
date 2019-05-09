@@ -8,9 +8,9 @@ class Obstacle {
         this.width = width;
         this.height = height;
 
-        // this.isMoving = false;
+        this.texture = this.level.renderer.ctx.createTexture();
 
-        this.loadTexture( this.level.renderer.ctx );
+        Texture().load( this.level.renderer.ctx, 'images/sand.png', this.texture );
 
     }
 
@@ -85,7 +85,7 @@ class Obstacle {
 
     }
 
-    loadTexture( gl ) {
+    /*loadTexture( gl ) {
 
         this.texture = gl.createTexture();
         
@@ -112,6 +112,6 @@ class Obstacle {
 
         image.src = 'images/sand.png';
 
-    }
+    }*/
 
 }

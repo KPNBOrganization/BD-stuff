@@ -17,7 +17,7 @@
 
         var elements = [];
 
-        for( let i = 0; i < 100000; i++ ) {
+        for( let i = 0; i < 500; i++ ) {
 
             let element = document.createElementNS( 'http://www.w3.org/2000/svg', 'rect' );
 
@@ -33,20 +33,23 @@
 
         }
 
-        /*var timeBefore = Date.now();
+        var timeBefore = Date.now();
 
         setInterval(function() {
 
             for( let element of elements ) {
 
-                element.setAttribute( 
-                    'transform', 
-                    'translate(' 
-                        + Math.floor(Math.random() * 501) 
-                        + ', ' 
-                        + Math.floor(Math.random() * 501) 
-                        + ')' 
-                );
+                element.setAttribute( 'x', Math.floor(Math.random() * 501) );
+                element.setAttribute( 'y', Math.floor(Math.random() * 501) );
+
+                // element.setAttribute( 
+                //     'transform', 
+                //     'translate(' 
+                //         + Math.floor(Math.random() * 501) 
+                //         + ', ' 
+                //         + Math.floor(Math.random() * 501) 
+                //         + ')' 
+                // );
 
             }
 
@@ -54,7 +57,7 @@
 
             timeBefore = timeAfter;
 
-        }, 0);*/
+        }, 0);
 
     };
 

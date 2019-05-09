@@ -1,0 +1,66 @@
+<svg version="1.1" id="board" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <style>
+
+        * {
+            font-family: "Comic Sans MS", cursive, sans-serif;
+        }
+
+        #top-bar {
+            font-weight: bold;
+        }
+
+        .playing-simbol text {
+            font-size: 150px;
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+
+    <image width="100%" height="100%" xlink:href="images/paper.png" preserveAspectRatio="none"></image>
+
+    <svg id="top-bar" height="100" width="100%">
+
+        <svg viewBox="0 0 50 100" preserveAspectRatio="xMinYMin meet">
+            <text font-size="60" x="30" y="20" dy="50%" fill="red">X</text>
+        </svg>
+
+        <svg viewBox="0 0 150 100" preserveAspectRatio="xMidYMid meet">
+            <text id="score" font-size="60" y="20" dy="50%" fill="black">0 : 0</text>
+        </svg>
+
+        <svg viewBox="0 0 50 100" preserveAspectRatio="xMaxYMin meet">
+            <text font-size="60" x="-20" y="20" dy="50%" fill="blue">0</text>
+        </svg>
+
+    </svg>
+
+    <svg id="grid"></svg>
+
+    <svg id="modal" display="none">
+
+        <rect x="0" y="0" width="100%" height="100%" fill="rgba( 255, 255, 255, 0.9 )"></rect>
+
+        <text id="winner" x="50%" y="20%" text-anchor="middle" dominant-baseline="central" style="font-size: 60px">DRAW</text>
+
+        <svg id="reload" x="50%" y="40%" width="200" height="80" overflow="visible">
+
+            <rect width="100%" height="100%" fill="#dddddd" rx="10" ry="10" transform="translate( -100, -40 )"></rect>
+            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" fill="white" style="font-size: 30px;" transform="translate( -100, -40 )">CONTINUE</text>
+
+        </svg>
+
+    </svg>
+
+    <script xlink:href="js/cell.js"></script>
+    <script xlink:href="js/field.js"></script>
+    <script xlink:href="js/game.js"></script>
+
+    <script>
+
+        var game = new Game();
+
+    </script>
+
+</svg>
