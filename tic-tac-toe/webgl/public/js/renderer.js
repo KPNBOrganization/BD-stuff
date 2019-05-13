@@ -7,21 +7,17 @@ class Renderer {
         this.canvasWidth = canvas.width;
         this.canvasHeight = canvas.height;
 
-        // this.lastFrameTime = Date.now();
-        // this.currentFrameTime = Date.now();
-        // this.deltaTime = ( this.currentFrameTime - this.lastFrameTime ) / 1000;
-
         this.vertexPositionAttribute = null;
         this.vertexColorAttribute = null;
         this.vertexTexCoordAttribute = null;
 
         this.vertexTransformUniform = null;
-        // this.vertexViewUniform = null;
-        // this.vertexProjectionUniform = null;
+        this.vertexViewUniform = null;
+        this.vertexProjectionUniform = null;
 
         this.fragSamplerUniform = null;
 
-        /*this.projectionMatrix = new THREE.Matrix4();
+        this.projectionMatrix = new THREE.Matrix4();
             
         this.projectionMatrix.makePerspective( 
             -this.ctx.canvas.width / 2, 
@@ -33,7 +29,7 @@ class Renderer {
         );
 
         this.viewMatrix = new THREE.Matrix4();
-        this.viewMatrix.makeTranslation( 0.0, 0.0, -1.0 );*/
+        this.viewMatrix.makeTranslation( 0.0, 0.0, -1.0 );
 
         this.initShaders( this.ctx );
 
@@ -96,12 +92,9 @@ class Renderer {
         this.vertexTexCoordAttribute = gl.getAttribLocation( shaderProgram, 'aTextureCoord' );
         gl.enableVertexAttribArray( this.vertexTexCoordAttribute );
 
-        // this.vertexColorAttribute = gl.getAttribLocation( shaderProgram, 'aVertexColor' );
-        // gl.enableVertexAttribArray( this.vertexColorAttribute );
-
         this.vertexTransformUniform = gl.getUniformLocation( shaderProgram, 'uTransformMatrix' );
-        // this.vertexViewUniform = gl.getUniformLocation( shaderProgram, 'uViewMatrix' );
-        // this.vertexProjectionUniform = gl.getUniformLocation( shaderProgram, 'uProjectionMatrix' );
+        this.vertexProjectionUniform = gl.getUniformLocation( shaderProgram, 'uProjectionMatrix' );
+        this.vertexViewUniform = gl.getUniformLocation( shaderProgram, 'uViewMatrix' );
 
         this.fragSamplerUniform = gl.getUniformLocation( shaderProgram, 'uSampler' );
 
@@ -109,13 +102,25 @@ class Renderer {
 
     drawRect( posX, posY, width, height, color ) {
 
+        let rect = new Rect( this );
 
+        rect.drawRect( posX, posY, width, height, color );
 
     }
 
     drawImage( posX, posY, width, height, image ) {
 
+        let rect = new Rect( this );
 
+        rect.drawImage( posX, posY, width, height, image );
+
+    }
+
+    drawText( posX, posY, width, height, text, color = [ 0, 0, 0, 255 ] ) {
+
+        let rect = new Rect( this );
+
+        rect.drawText( posX, posY, width, height, text, color );
 
     }
 

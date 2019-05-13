@@ -9,7 +9,7 @@ const GAME_CONDITION_ZERO = 3;
 
 class Game {
 
-    constructor() {
+    constructor() {    
 
         this.currentPlayer = PLAYER_CROSS;
 
@@ -22,16 +22,31 @@ class Game {
         
         this.loadBoardImage();
 
+        this.zeroImage = null;
+        this.loadZeroImage();
+
+        this.crossImage = null;
+        this.loadCrossImage();
+
         this.topBarHeight = 100;
 
         this.winner = false;
         this.winnerModalVisible = false;
 
-        var canvas = document.getElementById( 'canvas' );
+        let canvas = document.getElementById( 'canvas' );
 
         canvas.addEventListener( 'click', ( event ) => this.mainClickHandler( event ) );
 
-        this.ctx = canvas.getContext( 'webgl' );
+        this.ctx = canvas.getContext( 'webgl', { premultipliedAlpha: false } );
+
+        this.ctx.clearColor( 0.0, 0.0, 0.0, 1.0 );
+        // this.ctx.enable( this.ctx.DEPTH_TEST );
+        // this.ctx.depthFunc( this.ctx.LEQUAL );
+        this.ctx.enable( this.ctx.BLEND );
+        this.ctx.blendFunc( this.ctx.SRC_ALPHA, this.ctx.ONE_MINUS_SRC_ALPHA );
+        this.ctx.clear( this.ctx.COLOR_BUFFER_BIT | this.ctx.DEPTH_BUFFER_BIT );
+
+        this.renderer = new Renderer( this.ctx, canvas );
 
         this.field = new Field( this, FIELD_SIZE );
 
@@ -49,7 +64,13 @@ class Game {
 
         if( this.boardImage ) {
 
-            // this.ctx.drawImage( this.boardImage, 0, 0, this.ctx.canvas.width, this.ctx.canvas.height );
+            this.renderer.drawImage( 
+                -this.ctx.canvas.width / 2, 
+                -this.ctx.canvas.height / 2, 
+                this.ctx.canvas.width, 
+                this.ctx.canvas.height, 
+                this.boardImage
+            );
 
         }
 
@@ -67,26 +88,64 @@ class Game {
 
     loadBoardImage() {
 
-        var image = new Image();
+        let image = new Image();
 
-        image.onload = () => this.boardImage = image;
+        image.onload = () => { this.boardImage = image; };
         image.src = 'images/paper.png'; 
+
+    }
+
+    loadZeroImage() {
+
+        let image = new Image();
+
+        image.onload = () => { this.zeroImage = image };
+        image.src = 'images/zero.png';
+
+    }
+
+    loadCrossImage() {
+
+        let image = new Image();
+
+        image.onload = () => { this.crossImage = image };
+        image.src = 'images/cross.png';
 
     }
 
     drawScore() {
 
-        // this.ctx.font = "bold 60px 'Comic Sans MS'";
-        // this.ctx.textAlign = "center";
+        if( this.crossImage ) {
 
-        // this.ctx.fillStyle = "red";
-        // this.ctx.fillText( "X", 45, 75 );
+            this.renderer.drawImage(
+                -this.ctx.canvas.width / 2 + 20, 
+                this.ctx.canvas.height / 2 - 75, 
+                60, 
+                60, 
+                this.crossImage
+            );
 
-        // this.ctx.fillStyle = "blue";
-        // this.ctx.fillText( "0", this.ctx.canvas.width - 45, 75 );
+        }
 
-        // this.ctx.fillStyle = "black";
-        // this.ctx.fillText( this.crossScore + ' : ' + this.zeroScore, this.ctx.canvas.width / 2, 75 );
+        if( this.zeroImage ) {
+
+            this.renderer.drawImage(
+                this.ctx.canvas.width / 2 - 80, 
+                this.ctx.canvas.height / 2 - 75, 
+                60, 
+                60, 
+                this.zeroImage
+            );
+
+        }
+
+        this.renderer.drawText(
+            -60.0,
+            this.ctx.canvas.height / 2 - 85,
+            120, 
+            60, 
+            this.crossScore + ' : ' + this.zeroScore
+        );
 
     }
 
@@ -103,45 +162,64 @@ class Game {
 
     drawWinnerModal() {
 
-        // this.ctx.fillStyle = "rgba( 255, 255, 255, 0.9 )";
-        // this.ctx.fillRect( 0, 0, this.ctx.canvas.width, this.ctx.canvas.height );
-
-        // this.ctx.font = "bold 60px 'Comic Sans MS'";
-        // this.ctx.textAlign = "center";
+        this.renderer.drawRect(
+            -this.ctx.canvas.width / 2,
+            -this.ctx.canvas.height / 2,
+            this.ctx.canvas.width,
+            this.ctx.canvas.height,
+            [ 255, 255, 255, 255 / 100 * 90 ]
+        );
 
         let text = "";
+        let color = [ 0, 0, 0, 255 ];
 
         switch( this.winner ) {
 
             case GAME_CONDITION_CROSS:
-                // this.ctx.fillStyle = "red";
+                color = [ 255, 0, 0, 255 ];
                 text = 'CROSS WON';
                 break;
 
             case GAME_CONDITION_ZERO:
-                // this.ctx.fillStyle = "blue";
+                color = [ 0, 0, 255, 255 ];
                 text = 'ZERO WON';
                 break;
 
             case GAME_CONDITION_DRAW:
-                // this.ctx.fillStyle = "green";
+                color = [ 0, 128, 0, 255 ];
                 text = 'DRAW';
                 break;
 
         }
 
-        // this.ctx.fillText( text, this.ctx.canvas.width / 2, 150 );
+        this.renderer.drawText(
+            -150.0,
+            150.0,
+            300, 
+            100, 
+            text,
+            color
+        );
 
         let width = 300;
         let height = 100;
 
-        // this.ctx.fillStyle = "#dddddd";
-        // this.ctx.fillRect( this.ctx.canvas.width / 2 - width / 2, 250, width, height );
+        this.renderer.drawRect(
+            -width / 2,
+            -height / 2,
+            width,
+            height,
+            [ 221, 221, 221, 255 ]
+        );
 
-        // this.ctx.font = "bold 45px 'Comic Sans MS'";
-        // this.ctx.textAlign = "center";
-        // this.ctx.fillStyle = "#ffffff";
-        // this.ctx.fillText( 'CONTINUE', this.ctx.canvas.width / 2, 250 + 65 );
+        this.renderer.drawText(
+            - ( width - 50 ) / 2,
+            - ( height + 10 ) / 2,
+            width - 50,
+            height,
+            'CONTINUE',
+            [ 255, 255, 255, 255 ]
+        );
 
     }
 
@@ -177,11 +255,11 @@ class Game {
 
     findWinner( cell, row, column ) {
         
-        var dColumn; 
-        var dRow;
+        let dColumn; 
+        let dRow;
 
-        var nRow;
-        var nColumn;	
+        let nRow;
+        let nColumn;	
 
         dRow = 1;
         dColumn = -1;
