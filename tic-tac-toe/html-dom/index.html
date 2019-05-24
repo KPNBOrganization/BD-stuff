@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<link rel="stylesheet" href="styles.css" />
+
+	<title>Tic Tac Toe</title>
+
+</head>
+
+<body>
+
+	<div id="field_wrap">
+
+		<div id="score-board">
+			<span class="active" id="cross">X</span>
+			<span id="score">0 : 0</span>
+			<span id="circle">O</span>
+		</div>
+
+		<table id="field">
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+
+	</div>
+
+	<a id="reset" href="#">Reset</a>
+
+	<div class="winner_notification" id="circle_won">
+		CIRCLE WON!<br />
+		<button class="reload">CONTINUE</button>
+	</div>
+
+	<div class="winner_notification" id="cross_won">
+		CROSS WON!<br />
+		<button class="reload">CONTINUE</button>
+	</div>
+
+	<div class="winner_notification" id="draw">
+		DRAW!<br />
+		<button class="reload">CONTINUE</button>
+	</div>
+
+	<script src="./js/cell.js"></script>
+	<script src="./js/field.js"></script>
+	<script src="./js/game.js"></script>
+
+	<script>
+
+		var game = new Game();
+
+	</script>
+
+</body>
+
+</html>
