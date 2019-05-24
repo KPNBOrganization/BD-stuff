@@ -23,14 +23,14 @@ a, a:visited {
 		box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
 	}
 
-		div#score {
+		div#score-board {
 			font-size: 60px;
 			font-weight: bold;
 			text-align: center;
 			padding: 0px 15px;
 		}
 
-			span#cross, span#circle { opacity: 0.3; }
+			/* span#cross, span#circle { opacity: 0.3; } */
 
 			span#cross {
 				display: block;
@@ -43,10 +43,10 @@ a, a:visited {
 				display: block;
 				float: right;
 
-				color: #009cff;
+				color: #0000ff;
 			}
 
-			div#score span.active { opacity: 1 !important; }
+			/* div#score-board span.active { opacity: 1 !important; } */
 
 		table#field {
 			width: 100%;
@@ -75,7 +75,7 @@ a, a:visited {
 				}
 
 				table#field tr .cross { color: #ff0000; }
-				table#field tr .circle { color: #009cff; }
+				table#field tr .circle { color: #0000ff; }
 
 				table#field :last-child {
 					border-bottom: none;
@@ -122,5 +122,5 @@ a, a:visited {
 		}
 
 		div#cross_won { color: #ff0000; }
-		div#circle_won { color: #009cff; }
+		div#circle_won { color: #0000ff; }
 		div#draw { color: #00ff00; }
